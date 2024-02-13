@@ -112,8 +112,6 @@ class DataInputWidget(QWidget):
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.submit_button)
-
-
         button_layout.addWidget(self.save_button)
 
         layout.addLayout(button_layout)
@@ -171,6 +169,23 @@ class DataInputWidget(QWidget):
             spaceAfter=2   # Espacio después del párrafo.
         )
 
+        centered_numero = ParagraphStyle(
+            name='Centerednumero',
+            parent=styles['Normal'],
+            fontName='Calibri',
+            fontSize=16,
+            alignment=0  # 0=Left, 1=Center, 2=Right
+        )
+
+        centered_correo = ParagraphStyle(
+            name='Centeredcorreo',
+            parent=styles['Normal'],
+            fontName='Calibri',
+            fontSize=16,
+            alignment=2  # 0=Left, 1=Center, 2=Right
+        )
+
+
 
         content = []
 
@@ -183,7 +198,7 @@ class DataInputWidget(QWidget):
         content.append(Paragraph(f'{company_location}', centered_style))
         content.append(Paragraph(f'{rut}', centered_style))
         content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
-        content.append(Paragraph(f'{contact_phone}\n {email}', centered_style))
+        content.append(Paragraph(f'{contact_phone}\n - \n{email}', centered_style))
         content.append(Spacer(1, 24))
         content.append(Paragraph('<b>FACTURA</b>', centered_style))
         content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_style2))
