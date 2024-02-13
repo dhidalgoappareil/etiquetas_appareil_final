@@ -149,6 +149,22 @@ class DataInputWidget(QWidget):
             alignment=1  # 0=Left, 1=Center, 2=Right
         )
 
+        centered_numero = ParagraphStyle(
+            name='Centerednumero',
+            parent=styles['Normal'],
+            fontName='Calibri',
+            fontSize=16,
+            alignment=0  # 0=Left, 1=Center, 2=Right
+        )
+
+        centered_correo = ParagraphStyle(
+            name='Centeredcorreo',
+            parent=styles['Normal'],
+            fontName='Calibri',
+            fontSize=16,
+            alignment=2  # 0=Left, 1=Center, 2=Right
+        )
+
         custom_title_style = ParagraphStyle(
             name='CustomTitleStyle',
             parent=styles['Normal'],
@@ -169,24 +185,6 @@ class DataInputWidget(QWidget):
             spaceAfter=2   # Espacio después del párrafo.
         )
 
-        centered_numero = ParagraphStyle(
-            name='Centerednumero',
-            parent=styles['Normal'],
-            fontName='Calibri',
-            fontSize=16,
-            alignment=0  # 0=Left, 1=Center, 2=Right
-        )
-
-        centered_correo = ParagraphStyle(
-            name='Centeredcorreo',
-            parent=styles['Normal'],
-            fontName='Calibri',
-            fontSize=16,
-            alignment=2  # 0=Left, 1=Center, 2=Right
-        )
-
-
-
         content = []
 
         # Agregar título al PDF
@@ -198,7 +196,12 @@ class DataInputWidget(QWidget):
         content.append(Paragraph(f'{company_location}', centered_style))
         content.append(Paragraph(f'{rut}', centered_style))
         content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
-        content.append(Paragraph(f'{contact_phone}\n - \n{email}', centered_style))
+
+        # Combina el número de teléfono y el correo electrónico en una sola cadena
+        combined_contact_info = f'<b>{contact_phone}</b> - {email}'
+
+        # Agrega el contenido combinado con los estilos correspondientes
+        content.append(Paragraph(combined_contact_info, centered_style))
         content.append(Spacer(1, 24))
         content.append(Paragraph('<b>FACTURA</b>', centered_style))
         content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_style2))
