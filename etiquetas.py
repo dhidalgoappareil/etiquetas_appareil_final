@@ -1,7 +1,8 @@
 import sys
 import shutil
 import os
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
+    QMessageBox, QFileDialog
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -121,6 +122,15 @@ class DataInputWidget(QWidget):
         self.setLayout(layout)
         self.pdf_counter = 1  # Inicializamos el contador de PDFs
         self.output_directory = r'C:\Users\mcorr\OneDrive\Desktop\Programas\etiquetas_appareil'  # Inicializa output_directory
+
+        # Evento 'returnPressed' para cambiar el foco al presionar Enter
+        self.client_type_input.returnPressed.connect(self.rut_input.setFocus)
+        self.rut_input.returnPressed.connect(self.company_location_input.setFocus)
+        self.company_location_input.returnPressed.connect(self.client_name_input.setFocus)
+        self.client_name_input.returnPressed.connect(self.contact_phone_input.setFocus)
+        self.contact_phone_input.returnPressed.connect(self.email_input.setFocus)
+        self.email_input.returnPressed.connect(self.invoice_number_input.setFocus)
+        self.invoice_number_input.returnPressed.connect(self.generate_pdf)
 
     def generate_pdf(self):
         # Obtener los datos ingresados por el usuario
