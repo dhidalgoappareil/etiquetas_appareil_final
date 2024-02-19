@@ -23,7 +23,7 @@ class DataInputWidget(QWidget):
         """)
 
         # Preguntar por el tipo de cliente (Particular o Privado)
-        self.client_type_label = QLabel('<b>¿Es el cliente <font color=black>Particular</font> o <font color=black>Privado</font>?</b>')
+        self.client_type_label = QLabel('<b>Ingrese el nombre de la empresa o Particular</font></b>')
         self.client_type_label.setStyleSheet("font-size: 16px;")
         self.client_type_label.setWordWrap(True)
 
@@ -198,16 +198,18 @@ class DataInputWidget(QWidget):
         content = []
 
         # Agregar título al PDF
-        content.append(Paragraph('<b>ETIQUETA DE DATOS</b>', custom_title_style))
+        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style))
 
         # Agregar contenido al PDF con saltos de línea
-        content.append(Spacer(1, 24))
-        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style2))
+        content.append(Spacer(1, 2))
         content.append(Paragraph(f'{company_location}', centered_style))
+        content.append(Spacer(1, 1))
         content.append(Paragraph(f'{rut}', centered_style))
+        content.append(Spacer(1, 3))
         content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
 
         # Combina el número de teléfono y el correo electrónico en una sola cadena
+        content.append(Spacer(1, 10))
         combined_contact_info = f'<b>{contact_phone}</b> - {email}'
 
         # Agrega el contenido combinado con los estilos correspondientes
