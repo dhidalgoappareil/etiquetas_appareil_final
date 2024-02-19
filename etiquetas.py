@@ -179,7 +179,7 @@ class DataInputWidget(QWidget):
             name='CustomTitleStyle',
             parent=styles['Normal'],
             fontName='Times-Bold',  # Cambiar la fuente a Times New Roman en negritas
-            fontSize=28,  # Cambiar el tamaño de la fuente a 28
+            fontSize=23,  # Cambiar el tamaño de la fuente a 28
             alignment=1,
             textColor=colors.black,
             spaceAfter=24
@@ -189,7 +189,7 @@ class DataInputWidget(QWidget):
             name='CustomTitleStyle2',  # Nombre del estilo, utilizado para referencia.
             parent=styles['Normal'],  # Estilo base del cual hereda características.
             fontName='Times-Bold',   # Nombre de la fuente (Times New Roman en negritas).
-            fontSize=18,  # Tamaño de la fuente en puntos. Cambiar la fuente en 18.
+            fontSize=28,  # Tamaño de la fuente en puntos. Cambiar la fuente en 22.
             alignment=1,  # Alineación del texto (0=izquierda, 1=centro, 2=derecha).
             textColor=colors.black,   # Color del texto.
             spaceAfter=2   # Espacio después del párrafo.
@@ -203,13 +203,13 @@ class DataInputWidget(QWidget):
         # Agregar contenido al PDF con saltos de línea
         content.append(Spacer(1, 2))
         content.append(Paragraph(f'{company_location}', centered_style))
-        content.append(Spacer(1, 1))
+        content.append(Spacer(1, 5)) 
         content.append(Paragraph(f'{rut}', centered_style))
-        content.append(Spacer(1, 3))
+        content.append(Spacer(1, 10))
         content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
 
         # Combina el número de teléfono y el correo electrónico en una sola cadena
-        content.append(Spacer(1, 10))
+        content.append(Spacer(1, 15))
         combined_contact_info = f'<b>{contact_phone}</b> - {email}'
 
         # Agrega el contenido combinado con los estilos correspondientes
