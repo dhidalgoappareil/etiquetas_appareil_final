@@ -175,7 +175,7 @@ class DataInputWidget(QWidget):
             alignment=2  # 0=Left, 1=Center, 2=Right
         )
 
-        custom_title_style = ParagraphStyle(
+        custom_title_particular_empresa = ParagraphStyle(
             name='CustomTitleStyle',
             parent=styles['Normal'],
             fontName='Times-Bold',  # Cambiar la fuente a Times New Roman en negritas
@@ -185,7 +185,7 @@ class DataInputWidget(QWidget):
             spaceAfter=24
         )
 
-        custom_title_style2 = ParagraphStyle(
+        custom_title_nombre_cliente = ParagraphStyle(
             name='CustomTitleStyle2',  # Nombre del estilo, utilizado para referencia.
             parent=styles['Normal'],  # Estilo base del cual hereda características.
             fontName='Times-Bold',   # Nombre de la fuente (Times New Roman en negritas).
@@ -195,10 +195,20 @@ class DataInputWidget(QWidget):
             spaceAfter=2   # Espacio después del párrafo.
         )
 
+        custom_title_factura = ParagraphStyle(
+            name='CustomTitleStyle2',  # Nombre del estilo, utilizado para referencia.
+            parent=styles['Normal'],  # Estilo base del cual hereda características.
+            fontName='Times-Bold',   # Nombre de la fuente (Times New Roman en negritas).
+            fontSize=25,  # Tamaño de la fuente en puntos. Cambiar la fuente en 22.
+            alignment=1,  # Alineación del texto (0=izquierda, 1=centro, 2=derecha).
+            textColor=colors.black,   # Color del texto.
+            spaceAfter=2   # Espacio después del párrafo.
+        )
+
         content = []
 
         # Agrega la parte de Particular o nombre
-        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style))
+        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_particular_empresa))
 
         # Agregar contenido al PDF con saltos de línea
         content.append(Spacer(1, 2))
@@ -206,7 +216,7 @@ class DataInputWidget(QWidget):
         content.append(Spacer(1, 5)) 
         content.append(Paragraph(f'{rut}', centered_style))
         content.append(Spacer(1, 10))
-        content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
+        content.append(Paragraph(f'<b>{client_name}</b>', custom_title_nombre_cliente))
 
         # Combina el número de teléfono y el correo electrónico en una sola cadena
         content.append(Spacer(1, 15))
@@ -216,7 +226,7 @@ class DataInputWidget(QWidget):
         content.append(Paragraph(combined_contact_info, centered_style))
         content.append(Spacer(1, 24))
         content.append(Paragraph('<b>FACTURA</b>', centered_style))
-        content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_style2))
+        content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_factura))
 
         # Agregar la imagen al final del PDF y escalarla
         img_path = 'C:/Users/mcorr/OneDrive/Desktop/Programas/etiquetas_appareil/imagen_HD_pie.png'
