@@ -2,13 +2,14 @@ import sys
 import shutil
 import os
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, \
-    QMessageBox, QFileDialog
+    QMessageBox, QFileDialog, QComboBox
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
+from reportlab.lib.enums import TA_CENTER
 
 class DataInputWidget(QWidget):
     def __init__(self):
@@ -66,6 +67,13 @@ class DataInputWidget(QWidget):
         self.invoice_number_input = QLineEdit()
         self.invoice_number_input.setPlaceholderText("Escribe tu respuesta aquí")
 
+        # Tipo de documento (Factura o Boleta)
+        self.document_type_label = QLabel('<b>Tipo de Documento:</b>')
+        self.document_type_label.setStyleSheet("font-size: 16px;")
+        self.document_type_input = QComboBox()
+        self.document_type_input.addItem("Factura")
+        self.document_type_input.addItem("Boleta")
+
         # Constante de porcentaje de escala de la imagen
         self.scale_percent = 62
 
@@ -110,6 +118,8 @@ class DataInputWidget(QWidget):
         layout.addWidget(self.email_input)
         layout.addWidget(self.invoice_number_label)
         layout.addWidget(self.invoice_number_input)
+        layout.addWidget(self.document_type_label)
+        layout.addWidget(self.document_type_input)
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.submit_button)
@@ -142,6 +152,9 @@ class DataInputWidget(QWidget):
         email = self.email_input.text()
         invoice_number = self.invoice_number_input.text()
 
+        # Obtener el tipo de documento seleccionado
+        document_type = self.document_type_input.currentText()
+
         # Crea el nombre del archivo PDF con el directorio especificado usando os.path.join
         pdf_filename = os.path.join(self.output_directory, f'cliente_info_{self.pdf_counter}.pdf')
         doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
@@ -156,51 +169,25 @@ class DataInputWidget(QWidget):
             parent=styles['Normal'],
             fontName='Calibri',
             fontSize=16,
-            alignment=1  # 0=Left, 1=Center, 2=Right
+            alignment=TA_CENTER  # 0=Left, 1=Center, 2=Right
         )
 
-        centered_numero = ParagraphStyle(
-            name='Centerednumero',
-            parent=styles['Normal'],
-            fontName='Calibri',
-            fontSize=16,
-            alignment=0  # 0=Left, 1=Center, 2=Right
-        )
-
-        centered_correo = ParagraphStyle(
-            name='Centeredcorreo',
-            parent=styles['Normal'],
-            fontName='Calibri',
-            fontSize=16,
-            alignment=2  # 0=Left, 1=Center, 2=Right
-        )
-
-        custom_title_particular_empresa = ParagraphStyle(
+        custom_title_style = ParagraphStyle(
             name='CustomTitleStyle',
             parent=styles['Normal'],
             fontName='Times-Bold',  # Cambiar la fuente a Times New Roman en negritas
             fontSize=23,  # Cambiar el tamaño de la fuente a 28
-            alignment=1,
+            alignment=TA_CENTER,
             textColor=colors.black,
             spaceAfter=24
         )
 
-        custom_title_nombre_cliente = ParagraphStyle(
+        custom_title_style2 = ParagraphStyle(
             name='CustomTitleStyle2',  # Nombre del estilo, utilizado para referencia.
             parent=styles['Normal'],  # Estilo base del cual hereda características.
             fontName='Times-Bold',   # Nombre de la fuente (Times New Roman en negritas).
             fontSize=28,  # Tamaño de la fuente en puntos. Cambiar la fuente en 22.
-            alignment=1,  # Alineación del texto (0=izquierda, 1=centro, 2=derecha).
-            textColor=colors.black,   # Color del texto.
-            spaceAfter=2   # Espacio después del párrafo.
-        )
-
-        custom_title_factura = ParagraphStyle(
-            name='CustomTitleStyle2',  # Nombre del estilo, utilizado para referencia.
-            parent=styles['Normal'],  # Estilo base del cual hereda características.
-            fontName='Times-Bold',   # Nombre de la fuente (Times New Roman en negritas).
-            fontSize=25,  # Tamaño de la fuente en puntos. Cambiar la fuente en 22.
-            alignment=1,  # Alineación del texto (0=izquierda, 1=centro, 2=derecha).
+            alignment=TA_CENTER,  # Alineación del texto (0=izquierda, 1=centro, 2=derecha).
             textColor=colors.black,   # Color del texto.
             spaceAfter=2   # Espacio después del párrafo.
         )
@@ -208,7 +195,7 @@ class DataInputWidget(QWidget):
         content = []
 
         # Agrega la parte de Particular o nombre
-        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_particular_empresa))
+        content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style))
 
         # Agregar contenido al PDF con saltos de línea
         content.append(Spacer(1, 2))
@@ -216,7 +203,7 @@ class DataInputWidget(QWidget):
         content.append(Spacer(1, 5)) 
         content.append(Paragraph(f'{rut}', centered_style))
         content.append(Spacer(1, 10))
-        content.append(Paragraph(f'<b>{client_name}</b>', custom_title_nombre_cliente))
+        content.append(Paragraph(f'<b>{client_name}</b>', custom_title_style2))
 
         # Combina el número de teléfono y el correo electrónico en una sola cadena
         content.append(Spacer(1, 15))
@@ -225,16 +212,28 @@ class DataInputWidget(QWidget):
         # Agrega el contenido combinado con los estilos correspondientes
         content.append(Paragraph(combined_contact_info, centered_style))
         content.append(Spacer(1, 24))
-        content.append(Paragraph('<b>FACTURA</b>', centered_style))
-        content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_factura))
+
+        # Utiliza el tipo de documento seleccionado en lugar de un valor fijo
+        content.append(Paragraph(f'<b>{document_type}</b>', centered_style))
+        content.append(Paragraph(f'<b>N° {invoice_number}</b>', custom_title_style2))
 
         # Agregar la imagen al final del PDF y escalarla
         img_path = 'C:/Users/mcorr/OneDrive/Desktop/Programas/etiquetas_appareil/imagen_HD_pie.png'
         img = Image(img_path)
         img.drawWidth = img.drawWidth * self.scale_percent / 100  # Escalar el ancho
         img.drawHeight = img.drawHeight * self.scale_percent / 100  # Escalar la altura
-        content.append(Spacer(1, 26))
+        content.append(Spacer(1, 28))
         content.append(img)
+
+        # Additional styling for the image caption (modificado)
+        caption_style = ParagraphStyle(
+            name='CaptionStyle',
+            parent=styles['Normal'],
+            fontName='Calibri',
+            fontSize=12,
+            alignment=TA_CENTER  # Center alignment
+        )
+        content.append(Spacer(1, 5))
 
         doc.build(content)
         self.pdf_counter += 1
