@@ -197,7 +197,7 @@ class DataInputWidget(QWidget):
 
         content = []
 
-        # Agrega la parte de Particular o nombre empresa
+        # Agrega la parte de Particular o nombre
         content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style))
 
         # Agregar contenido al PDF con saltos de línea
@@ -223,7 +223,7 @@ class DataInputWidget(QWidget):
         img = Image(img_path)
         img.drawWidth = img.drawWidth * self.scale_percent / 100  # Escalar el ancho
         img.drawHeight = img.drawHeight * self.scale_percent / 100  # Escalar la altura
-        content.append(Spacer(1, 24))
+        content.append(Spacer(1, 26))
         content.append(img)
 
         doc.build(content)
