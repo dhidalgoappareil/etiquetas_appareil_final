@@ -197,7 +197,7 @@ class DataInputWidget(QWidget):
 
         content = []
 
-        # Agregar título al PDF
+        # Agrega la parte de Particular o nombre empresa
         content.append(Paragraph(f'<b><font color=black>{client_type}</font></b>', custom_title_style))
 
         # Agregar contenido al PDF con saltos de línea
